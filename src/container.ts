@@ -1,24 +1,26 @@
 import * as awilix from 'awilix';
-import { TestService } from './services/test';
-import { DependentService } from './services/dependent';
+import { asFunction, listModules } from 'awilix';
+import createLogger from './utils/logger';
 
-interface ICradle {
-  testService: TestService;
-  dependentService: DependentService;
-}
+const container = awilix.createContainer();
 
-const container = awilix.createContainer<ICradle>();
+listModules(['src/@(services|gateways)/**/index.ts']).forEach((module) => {
+  const loadedModule = require(module.path);
 
-container.loadModules(['src/@(services|gateways)/**/index.ts'], {
-  formatName: (_, descriptor) => {
-    // @ts-ignore
-    const functionName = descriptor.value.name;
-    const capitalizedResolvedName = functionName.slice('create'.length);
-    return (
-      capitalizedResolvedName.charAt(0).toLowerCase() +
-      capitalizedResolvedName.slice(1)
-    );
-  },
+  const functionName = loadedModule.default.name;
+  const capitalizedResolvedName = functionName.slice('create'.length);
+  const moduleName =
+    capitalizedResolvedName.charAt(0).toLowerCase() +
+    capitalizedResolvedName.slice(1);
+
+  container.register(
+    moduleName,
+    asFunction(loadedModule.default, {
+      injector: () => ({
+        logger: createLogger(moduleName),
+      }),
+    }),
+  );
 });
 
 export default container;

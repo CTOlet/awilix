@@ -1,16 +1,20 @@
 import { TestService } from '../test';
 import { FirstCarGateway } from '../../gateways/first-car';
 import { SecondCarGateway } from '../../gateways/second-car';
+import { Logger } from '../../utils/logger';
 
 interface DependentServiceInjections {
   testService: TestService;
   firstCarGateway: FirstCarGateway;
   secondCarGateway: SecondCarGateway;
+  logger: Logger;
 }
 
 const createDependentService = (injected: DependentServiceInjections) => ({
   getInnerData: () => injected.testService.getData(),
   getCarNames: () => {
+    injected.logger.info('Printing two car names');
+
     const firstCarName = injected.firstCarGateway.getName();
     const secondCarName = injected.secondCarGateway.getName();
 

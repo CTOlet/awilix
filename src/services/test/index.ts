@@ -1,13 +1,22 @@
+import { Logger } from '../../utils/logger';
+
 interface GetAverageInput {
   x: number;
   y: number;
 }
+interface TestServiceInjections {
+  logger: Logger;
+}
 
-const createTestService = () => ({
+const createTestService = (input: TestServiceInjections) => ({
   /**
    * asdf
    */
-  getData: () => 'Hello world!',
+  getData: () => {
+    input.logger.info('Saying hello');
+
+    return 'Hello world!';
+  },
   getAverage: (input: GetAverageInput) => {
     const { x, y } = input;
 
