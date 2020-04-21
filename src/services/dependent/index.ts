@@ -10,17 +10,21 @@ interface DependentServiceInjections {
   logger: Logger;
 }
 
-const createDependentService = (injected: DependentServiceInjections) => ({
-  getInnerData: () => injected.testService.getData(),
-  getCarNames: () => {
-    injected.logger.info('Printing two car names');
+const createDependentService = (injected: DependentServiceInjections) => {
+  console.log('Initializing DependentService');
 
-    const firstCarName = injected.firstCarGateway.getName();
-    const secondCarName = injected.secondCarGateway.getName();
+  return ({
+    getInnerData: () => injected.testService.getData(),
+    getCarNames: () => {
+      injected.logger.info('Printing two car names');
 
-    return { firstCarName, secondCarName };
-  },
-});
+      const firstCarName = injected.firstCarGateway.getName();
+      const secondCarName = injected.secondCarGateway.getName();
+
+      return { firstCarName, secondCarName };
+    },
+  });
+};
 
 export type DependentService = ReturnType<typeof createDependentService>;
 

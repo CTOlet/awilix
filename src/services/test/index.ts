@@ -8,21 +8,25 @@ interface TestServiceInjections {
   logger: Logger;
 }
 
-const createTestService = (input: TestServiceInjections) => ({
-  /**
-   * asdf
-   */
-  getData: () => {
-    input.logger.info('Saying hello');
+const createTestService = (input: TestServiceInjections) => {
+  console.log('Initializing TestService');
 
-    return 'Hello world!';
-  },
-  getAverage: (input: GetAverageInput) => {
-    const { x, y } = input;
+  return ({
+    /**
+     * asdf
+     */
+    getData: () => {
+      input.logger.info('Saying hello');
 
-    return (x + y) / 2.0;
-  },
-});
+      return 'Hello world!';
+    },
+    getAverage: (input: GetAverageInput) => {
+      const { x, y } = input;
+
+      return (x + y) / 2.0;
+    },
+  });
+};
 
 export type TestService = ReturnType<typeof createTestService>;
 

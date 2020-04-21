@@ -7,4 +7,6 @@ const dependentService = container.resolve<DependentService>(
 
 console.log(dependentService.getInnerData());
 console.log(dependentService.getCarNames());
-console.log(container.has('firstCarGateway'));
+
+const dummyService = container.cradle.dummyService;
+console.log(container.has('dummyService'));
